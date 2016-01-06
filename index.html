@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>tofuness - Ex</title>
+  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" />
+  <style>
+    html {
+      font-family: Arial, sans-serif;
+      background: #fcfbff;
+    }
+    #about-description a, #about-description a:visited {
+      color: #7b37fb;
+      text-decoration: none;
+      box-shadow: 0 1px 0 #7b37fb;
+    }
+    #about-description a:hover {
+      color: #7b37fb;
+      box-shadow: 0 2px 0 #7b37fb;
+    }
+    #eex {
+      cursor: default;
+      padding: 0 8px;
+      color: #fff;
+      font-weight: 700;
+      background: #5800ff;
+    }
+    #about {
+      padding: 30px;
+      color: #7b37fb;
+    }
+    #about-title {
+      padding-bottom: 10px;
+      font-size: 32px;
+    }
+    #about-description {
+      color: #7e7794;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    #about-list {
+      padding-top: 40px;
+      width: 100%;
+    }
+    .about-item {
+      display: block;
+      width: 100%;
+      color: #7e7794;
+      font-size: 64px;
+      text-decoration: none;
+      transform: translateX(0);
+      -webkit-transition: all 240ms cubic-bezier(0.165, 0.84, 0.44, 1);
+      transition: all 240ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .about-item:hover {
+      color: #7b37fb;
+      transform: translateX(5px);
+    }
+    #footer {
+      position: absolute;
+      height: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      box-shadow: inset 0 10px 0 #7b37fb;
+      /*background: #7b37fb;*/
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div id="about">
+    <div id="about-title">
+      <span id="eex">eex</span> is a collection of web eexperiments.
+    </div>
+    <div id="about-description">
+      Built by <a href="https://github.com/tofuness">Dennis Jin</a> / <a href="https://tofuness.com">tofuness.com</a>. Open sourced on <a href="https://github.com/tofuness/eex">Github</a>.
+    </div>
+    <div id="about-list">
+      <a class="about-item" href="sine" target="_blank">
+        Studies In a Dying Culture &#8625;
+      </a>
+      <a class="about-item" href="sine" target="_blank">
+        Sine Wave and Circles &#8625;
+      </a>
+    </div>
+  </div>
+  <div id="footer">
+  </div>
+  <script type="text/javascript" src="fittext.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      var items = document.querySelectorAll('.about-item');
+      for (var i = 0; i < items.length; i++) {
+        window.fitText(items.item(i), 1, {
+          maxFontSize: 82,
+          minFontSize: 32
+        });
+      }
+      window.onresize = function() {
+        var aboutHeight = document.getElementById('about').clientHeight;
+        document.getElementById('footer').style.height = 'calc(100% - ' + aboutHeight + 'px - 10px)';
+      }
+      setTimeout(function() {
+        window.onresize();
+      }, 100);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>eex - Sine Wave and Circles</title>
+  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" />
+  <style type="text/css">
+    html, body {
+      background: #fffdf8;
+    }
+    #pt {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -250px 0 0 -250px;
+      width: 500px;
+      height: 500px;
+    }
+    #about {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      margin-left: -66px;
+      color: #242424;
+      font-size: 11px;
+      line-height: 1.2;
+      text-align: center;
+    }
+    a, a:visited {
+      color: #242424;
+      text-decoration: none;
+      box-shadow: 0 1px 0 #242424;
+    }
+    a:hover {
+      box-shadow: inset 0 -5px 0 #f5e137, 0 1px 0 #f5e137;
+    }
+  </style>
+</head>
+<body>
+  <div id="pt">
+  </div>
+  <div id="about">
+    Mouse over to interact.<br />
+    Built by <a href="http://github.com/tofuness">Dennis Jin</a> / <a href="https://tofuness.com">tofuness.com</a>
+  </div>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+  <script type="text/javascript" src="pt.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      var colors = {
+        pearlWhite: '#fffdf8',
+        moonYellow: '#fff9e2',
+        tearBlack: '#242424',
+        hopeGold: '#f5e137',
+        rizeBlue: '#a6dcf5',
+        lazyGray: '#efefef',
+        loliRed: '#f0d3d3'
+      }
+      var space = new CanvasSpace('ladies', colors.pearlWhite).display('#pt');
+      var mouse = new Circle(space.size.$divide(2)).setRadius(30);
+      var form = new Form(space);
+
+      var pts = [];
+
+      for (var i = 0; i < 100; i++) {
+        pts.push(
+          new Vector(
+            space.size.x / 99 * i,
+            space.size.y / 2
+          )
+        );
+      }
+
+      var dotGrid = new Grid(
+        space.size.$multiply(0.1)
+      )
+      .to(
+        space.size.$multiply(0.9)
+      )
+      .init(30, 30, 'flex', 'flex');
+
+      space.add({
+        animate: function(time, fps, context) {
+          form.stroke(colors.hopeGold, 2);
+          var _pts = [];
+          for (var i = 0; i < pts.length; i++) {
+            var _p = pts[i].clone();
+            _p.set(_p.x, _p.y + 10 * Math.sin((time / 2000 % 1) * 2 * Const.pi + i / 20) * Math.cos((time / 2000 % 1) * 2 * Const.pi + i))
+            _p.scale2D(1, Math.max(1, pts[i].distance(mouse) / 50), space.center);
+            _pts.push(_p);
+          }
+          var thisCurve = new Curve().to(_pts);
+          form.curve(thisCurve.catmullRom());
+
+          dotGrid.generate(function(size, position, row, column, type, isOccupied) {
+            var dist = Math.sqrt(Math.pow(position.x - mouse.x, 2) + Math.pow(position.y - mouse.y, 2));
+            var thisDot =  new Circle(position);
+            form
+            .stroke(false)
+            .fill(colors.rizeBlue)
+            .circle(thisDot.setRadius(2));
+          });
+          dotGrid.create();
+        },
+        onMouseAction: function(type, x, y, evt) {
+          if (type === 'move') {
+            mouse.set(x, y);
+          }
+        }
+      });
+
+      space.bindMouse();
+      space.play();
+    }
+  </script>
+</body>
+</html>
