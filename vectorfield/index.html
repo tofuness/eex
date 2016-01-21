@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Vector Field</title>
+  <meta charset="utf-8" />
+  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet" type="text/css" />
+  <style>
+    body, html {
+      background: #f5f9ff;
+      font-family: 'Roboto Mono';
+    }
+    #pt {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -200px;
+      margin-left: -200px;
+      width: 400px;
+      height: 400px;
+    }
+    #about {
+      position: absolute;
+      left: 40px;
+      bottom: 40px;
+      color: #357cfe;
+      font-size: 11px;
+      text-align: left;
+    }
+    a, a:visited {
+      color: #357cfe;
+      text-decoration: none;
+      box-shadow: 0 1px 0 #357cfe;
+    }
+    a:hover, a:visited:hover {
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="about">
+    vector field<br />
+    built by <a href="http://github.com/tofuness">Dennis Jin</a> &middot; <a href="https://tofuness.com">tofuness.com</a>
+  </div>
+  <div id="pt">
+  </div>
+  <script type="text/javascript" src="pt.js"></script>
+  <script>
+  window.onload = function() {
+    var colors = {
+      lapisBlue: '#357cfe',
+      mistBlue: '#f5f9ff'
+    }
+    var space = new CanvasSpace('vs', colors.mistBlue).display('#pt');
+    var form = new Form(space);
+
+    var gapSize = space.size.$subtract(20).divide(20);
+    var field = [];
+
+    var mouse = new Point({
+      x: 0,
+      y: 0
+    });
+
+    for (var x = 0; x < 20; x++) {
+      for (var y = 0; y < 20; y++) {
+        field.push(new Vector({
+          x: gapSize.x * x + gapSize.x,
+          y: gapSize.y * y + gapSize.y,
+          z: 0
+        }));
+      }
+    }
+
+    space.add({
+      animate: function(time, fps, context) {
+        for (var i = 0; i < field.length; i++) {
+          var shiftedTime = i * 10 + time;
+          var timeFactor = shiftedTime / 3000 % Math.PI * 2;
+
+          var sinValue = Math.sin(field[i].y + timeFactor);
+          var cosValue = Math.cos(field[i].x + timeFactor);
+
+          var direction = new Vector(sinValue, cosValue).normalize();
+          form.stroke(colors.lapisBlue, 1, 'round');
+          form.line(new Line(field[i]).to(direction.$multiply(Math.abs(sinValue + cosValue) * 5)).relative());
+        }
+      },
+      onMouseAction(type, x, y, e) {
+        mouse.set(x, y);
+      }
+    });
+
+    space.bindMouse();
+    space.play();
+  }
+  </script>
+</body>
+</html>
