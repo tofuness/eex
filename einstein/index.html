@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Warping Waves</title>
+  <meta charset="utf-8" />
+  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,100" rel="stylesheet" type="text/css">
+  <style>
+    /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:bold}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-0.5em}sub{bottom:-0.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{height:auto}input[type="search"]{-webkit-appearance:textfield;box-sizing:content-box}input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:bold}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}
+    body, html {
+      width: 100%;
+      height: 100%;
+      background: #222;
+      perspective: 1000px;
+    }
+    .cf:before,
+    .cf:after {
+      content: " ";
+      display: table;
+    }
+    .cf:after {
+      clear: both;
+    }
+    .cf {
+      *zoom: 1;
+    }
+    #pt {
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -300px 0 0 -300px;
+      width: 600px;
+      height: 600px;
+      transition: all 5s cubic-bezier(0.165, 0.84, 0.44, 1);
+      transform-origin: center center;
+    }
+    #pt.visible {
+      opacity: 1;
+      transform: rotateX(40deg);
+    }
+    #about {
+      position: absolute;
+      left: 40px;
+      bottom: 40px;
+    }
+    #about-hd {
+      float: left;
+      opacity: 0;
+      padding-right: 20px;
+      border-right: 1px solid #555;
+    }
+    #about-hd.visible {
+      opacity: 1;
+      transition: all 2s cubic-bezier(0.165, 0.84, 0.44, 1);
+      transition-delay: 2s;
+    }
+    #about-title {
+      color: #888;
+      font-size: 24px;
+      font-weight: 300;
+      font-family: 'Raleway', sans-serif;
+      letter-spacing: 0.65px;
+      text-transform: uppercase;
+      text-rendering: optimizeLegibility;
+    }
+    #about-description {
+      color: #555;
+      font-size: 11px;
+    }
+    #about-credit {
+      opacity: 0;
+      line-height: 1.5;
+      padding-left: 20px;
+      float: left;
+      height: 42px;
+      color: #555;
+      font-size: 11px;
+      display: flex;
+      align-items: left;
+      flex-wrap: wrap;
+      flex-direction: column;
+      justify-content: center;
+    }
+    #about-credit.visible {
+      opacity: 1;
+      transition: all 2s cubic-bezier(0.165, 0.84, 0.44, 1);
+      transition-delay: 2.15s;
+    }
+    a, a:visited {
+      color: #555;
+      text-decoration: none;
+      box-shadow: 0 1px 0 #555;
+    }
+    a:hover {
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="pt">
+  </div>
+  <div id="about" class="cf">
+    <div id="about-hd">
+      <div id="about-title">
+        Einstein Waves
+        <!-- Hey, we found gravitational waves! -->
+      </div>
+      <div id="about-description">
+        Move mouse to interact
+      </div>
+    </div>
+    <div id="about-credit">
+      <div>Built by <a href="https://github.com/tofuness">Dennis Jin</a></div>
+      <div><a href="https://tofuness.com/">tofuness.com</a> &middot; <a href="http://tofuness.github.io/eex/">view more eexperiments</a></div>
+    </div>
+  </div>
+  <div id="hole"></div>
+  <script src="pt.js"></script>
+  <script>
+    window.onload = function() {
+      var space = new CanvasSpace('pw', '#222').display('#pt');
+      var mouse = new Circle(space.size.$divide(3)).setRadius(1);
+      var anchor = new Circle(space.size.$divide(3)).setRadius(1);
+      var form = new Form(space);
+
+      var spaceMargin = 100;
+      var gapSizeX = space.size.$subtract(spaceMargin).divide(60).x;
+      var gapSizeY = space.size.$subtract(spaceMargin).divide(60).y;
+      var grid = [];
+
+      for (var x = 0; x < 60; x++) {
+        for (var y = 0; y < 60; y++) {
+          grid.push({
+            point: new Circle({
+              x: x * gapSizeX + gapSizeX / 2 + spaceMargin / 2,
+              y: y * gapSizeY + gapSizeY / 2 + spaceMargin / 2
+            }),
+            line: new Line({
+              x: x * gapSizeX + gapSizeX / 2  + spaceMargin / 2,
+              y: y * gapSizeY + gapSizeY / 2  + spaceMargin / 2 - 20
+            })
+            .to({
+              x: 0,
+              y: 10
+            })
+            .relative()
+          });
+        }
+      }
+      var easing = 0.1;
+
+      space.add({
+        animate: function(time, fps, context) {
+          var distance = mouse.distance(anchor);
+          var delta = mouse.$subtract(anchor).multiply(easing);
+
+          if (distance > 0.5) {
+            anchor.moveBy({
+              x: delta.x,
+              y: delta.y
+            });
+          }
+
+          for (var i = 0; i < grid.length; i++) {
+            var shiftedTime = Math.exp(100 / grid[i].point.distance(space.center) + 3) * -200 + grid[i].point.distance(anchor) * -15 + time;
+            var timeFactor = shiftedTime / 500 % (Math.PI * 2);
+            form
+              .fill('#ffffff')
+              .stroke(false)
+              .circle(
+                grid[i].point
+                .setRadius(
+                  grid[i].point.distance(space.center) < 130 ? 0 :
+                  0.4 + Math.sin(timeFactor) * 0.4
+                )
+                .moveTo(
+                  grid[i].line
+                    .interpolate(0.6 + Math.sin(-timeFactor) * 0.6)
+                )
+              );
+          }
+        }
+      });
+
+      space.bindMouse();
+      space.play();
+
+      var ptEl = document.getElementById('pt');
+      window.addEventListener('mousemove', function(e) {
+        mouse.set(e.clientX - ptEl.offsetLeft, e.clientY - ptEl.offsetTop);
+      });
+
+      // File issue to disable auto-resizing
+      window.addEventListener('resize', function() {
+        space.resize(600, 600);
+      });
+
+      document.getElementById('pt').className += 'visible';
+      document.getElementById('about-hd').className += 'visible';
+      document.getElementById('about-credit').className += 'visible';
+    }
+  </script>
+</body>
+</html>
