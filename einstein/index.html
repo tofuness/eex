@@ -121,7 +121,7 @@
   <script src="pt.js"></script>
   <script>
     window.onload = function() {
-      var space = new CanvasSpace('pw', '#222').display('#pt');
+      var space = new CanvasSpace('pw', '#222').display('#pt').autoResize(false);
       var mouse = new Circle(space.size.$divide(3)).setRadius(1);
       var anchor = new Circle(space.size.$divide(3)).setRadius(1);
       var form = new Form(space);
@@ -191,11 +191,6 @@
       var ptEl = document.getElementById('pt');
       window.addEventListener('mousemove', function(e) {
         mouse.set(e.clientX - ptEl.offsetLeft, e.clientY - ptEl.offsetTop);
-      });
-
-      // File issue to disable auto-resizing
-      window.addEventListener('resize', function() {
-        space.resize(600, 600);
       });
 
       document.getElementById('pt').className += 'visible';
