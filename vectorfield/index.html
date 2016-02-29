@@ -4,10 +4,13 @@
   <title>Vector Field</title>
   <meta charset="utf-8" />
   <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" />
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet" type="text/css" />
   <style>
     body, html {
+      overflow: hidden;
+      height: 100%;
       background: #f5f9ff;
       font-family: 'Roboto Mono';
     }
@@ -22,6 +25,7 @@
     }
     #about {
       position: absolute;
+      z-index: 100;
       left: 40px;
       bottom: 40px;
       color: #357cfe;
@@ -36,14 +40,24 @@
     a:hover, a:visited:hover {
       box-shadow: none;
     }
+    @media (max-width : 730px) {
+      #pt {
+        position: static;
+        margin: 0;
+      }
+      #about {
+        left: 20px;
+        bottom: 20px;
+      }
+    }
   </style>
 </head>
 <body>
+  <div id="pt">
+  </div>
   <div id="about">
     vector field<br />
     built by <a href="http://github.com/tofuness">Dennis Jin</a> &middot; <a href="https://tofuness.com">tofuness.com</a><br /><a href="https://github.com/tofuness/eex">open-sourced on Github</a> &middot; <a href="../">view more eexperiments</a>
-  </div>
-  <div id="pt">
   </div>
   <script type="text/javascript" src="pt.js"></script>
   <script>
@@ -55,7 +69,7 @@
     var space = new CanvasSpace('vs', colors.mistBlue).display('#pt');
     var form = new Form(space);
 
-    var gapSize = space.size.$subtract(40).divide(25);
+    var gapSize = space.size.$subtract(20).divide(25);
     var field = [];
 
     var mouse = new Point({
@@ -77,7 +91,7 @@
       animate: function(time, fps, context) {
         for (var i = 0; i < field.length; i++) {
           var shiftedTime = i * 4 + time;
-          var timeFactor = shiftedTime / 2000 % Math.PI * 2;
+          var timeFactor = shiftedTime / 3000 % Math.PI * 2;
 
           var sinValue = Math.sin(field[i].y + timeFactor);
           var cosValue = Math.cos(field[i].x + timeFactor);
