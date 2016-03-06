@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>
+    Springy
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Playfair+Display:400,700" rel="stylesheet" type="text/css" />
+  <style>
+    /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+    html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:bold}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-0.5em}sub{bottom:-0.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{height:auto}input[type="search"]{-webkit-appearance:textfield;box-sizing:content-box}input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:bold}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}
+
+    .playfair {
+      font-family: 'Playfair Display', serif;
+    }
+    .italic {
+      font-style: italic;
+    }
+    .cf:before,
+    .cf:after {
+      content: " ";
+      display: table;
+    }
+    .cf:after {
+      clear: both;
+    }
+    .cf {
+      *zoom: 1;
+    }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Times New Roman', Times, serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    html {
+      transition: 0.1s ease all;
+      will-change: background;
+    }
+    html.inverted {
+      background: #000;
+    }
+    html.inverted #about * {
+      color: #ccc;
+      transition: 0.25s ease all;
+    }
+    html.inverted .letter {
+      color: #fff!important;
+    }
+    a, a:visited {
+      color: #000;
+    }
+    a:hover {
+      text-decoration: none;
+    }
+    html.inverted a, html.inverted a:visited {
+      color: #fff;
+    }
+    html.inverted #inverted-spooky:after {
+      content: "spoooky";
+    }
+    #inverted-spooky:after {
+      content: "springy";
+    }
+    #animation {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -60px 0 0 -300px;
+      width: 600px;
+      height: 120px;
+      text-align: center;
+    }
+    #word {
+      cursor: crosshair;
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    #word.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+    #word.active letter {
+
+    }
+    .letters {
+      height: 100%;
+    }
+    .letter {
+      height: 120px;
+      transition: 0.25s ease all;
+    }
+    .symbol {
+      float: left;
+      height: 100%;
+      line-height: 120px;
+      text-align: center;
+    }
+    .small {
+      font-size: 80px;
+      font-weight: bold;
+    }
+    #about  {
+      position: absolute;
+      top: calc(50% + 120px);
+      left: 50%;
+      margin-left: -200px;
+      width: 400px;
+      color: #333;
+      font-size: 11px;
+      font-family: 'Roboto Mono';
+      opacity: 0;
+      text-align: center;
+      transform: translateY(-30px);
+    }
+    #about.visible {
+      opacity: 1;
+      transition: all 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+      transform: translateY(0);
+    }
+    #credit {
+      color: #999;
+    }
+    #credit a {
+      color: #999;
+    }
+    #action-keyword:after {
+      content: "mouse over";
+    }
+    @media (max-width : 730px) {
+      #about {
+        top: calc(50% + 60px);
+      }
+      #animation {
+        transform: scale(0.6);
+      }
+      #action-keyword:after {
+        content: "tap";
+      }
+    }
+  </style>
+  <script type="text/javascript" src="bliss.min.js"></script>
+  <script type="text/javascript" src="rebound.min.js"></script>
+  <script>
+    // Poor man's kerning
+    var wordStructure = [{
+      symbols: ['D', 'で', 'd', '霊'],
+      symbolWidths: [73, 90, 55, 99],
+      symbolSizes: [100, 100, 100, 80],
+      symbolWeights: [400, 400, 400, 700],
+      symbolClasses: ['playfair', '', '', '']
+    }, {
+      symbols: ['e', 'え', 'E', '王', '€'],
+      symbolWidths: [45, 90, 75, 110, 60],
+      symbolSizes: [80, 100, 100, 100, 100],
+      symbolWeights: [400, 400, 400, 700, 700],
+      symbolClasses: ['', '', '', '', '']
+    }, {
+      symbols: ['N', 'n', 'に'],
+      symbolWidths: [80, 60, 100],
+      symbolSizes: [100, 100, 100],
+      symbolWeights: [400, 400, 700],
+      symbolClasses: ['', '', '']
+    }, {
+      symbols: ['n', '4', 'n'],
+      symbolWidths: [80, 60, 70],
+      symbolSizes: [100, 100, 100],
+      symbolWeights: [700, 400, 400],
+      symbolClasses: ['playfair italic', '', 'playfair']
+    }, {
+      symbols: ['i', 'I', 'い', 'l'],
+      symbolWidths: [30, 40, 95, 58],
+      symbolSizes: [100, 80, 100, 100],
+      symbolWeights: [400, 400, 400, 700],
+      symbolClasses: ['', 'playfair', '', '']
+    }, {
+      symbols: ['S', 's', '$'],
+      symbolWidths: [80, 41, 50],
+      symbolSizes: [100, 100, 80],
+      symbolWeights: [700, 400, 700],
+      symbolClasses: ['playfair italic', '', '']
+    }];
+
+    var isPaused = false;
+    var animateInDelay = 2000;
+
+    function getSymbolsTranslation(widths, symbolIndex) {
+      if (symbolIndex === 0) return 0;
+      return widths.reduce(function(p, c, currentIndex) {
+        return currentIndex < symbolIndex ? p + c : p;
+      });
+    }
+
+    function generateRandomInt(max) {
+      return Math.round(Math.random() * max);
+    }
+
+    window.onload = function() {
+      var springSystem = new rebound.SpringSystem();
+      var letterSprings = [];
+
+      var letters = [];
+
+      wordStructure.forEach(function(letter, letterIndex) {
+        var containerWidth = letter.symbolWidths.reduce(function(p, c) {
+          return p + c;
+        });
+        var currentTimeout = null;
+        var currentSymbolsTranslation = 0;
+        var currentSymbolsIndex = 0;
+        var currentSpringBit = 0;
+        var letterContent = [];
+
+        // For each symbol, add a symbol node to the symbols container
+        letter.symbols.forEach(function(symbol, symbolIndex) {
+          letterContent.push({
+            tag: 'div',
+            className: 'symbol ' + (letter.symbolClasses[symbolIndex] ? letter.symbolClasses[symbolIndex] : ''),
+            style: {
+              width: letter.symbolWidths[symbolIndex] + 'px',
+              fontSize: letter.symbolSizes[symbolIndex] + 'px',
+              fontWeight: letter.symbolWeights[symbolIndex]
+            },
+            contents: [symbol]
+          });
+        });
+
+        var letterNode = $.create('div', {
+          className: 'letter',
+          style: {
+            float: isPaused ? 'none' : 'left',
+            overflow: isPaused ? 'visible' : 'hidden'
+          },
+          contents: [{
+            className: 'symbols cf',
+            contents: letterContent,
+            style: {
+              width: containerWidth + 'px'
+            }
+          }]
+        });
+
+        // Add letter to letters container
+        $.inside(letterNode, $('.letters'));
+
+        letterSprings.push(springSystem.createSpring(100, 6));
+        letterSprings[letterIndex].addListener({
+          onSpringUpdate: function(spring) {
+            var springValue = spring.getCurrentValue();
+            var oldTranslation = currentSymbolsTranslation;
+            var newTranslation = getSymbolsTranslation(letter.symbolWidths, currentSymbolsIndex);
+            // Generates new interpolation from old position to new position
+            var containerTranslation = rebound.MathUtil.mapValueInRange(
+                                        springValue,
+                                        1 - currentSpringBit,
+                                        currentSpringBit,
+                                        oldTranslation,
+                                        newTranslation
+                                      );
+            letterNode.children[0].style.transform = 'translateX(' + -containerTranslation + 'px)';
+            if (spring.isAtRest()) {
+              // Finished
+              currentSymbolsTranslation = newTranslation;
+            }
+          }
+        });
+
+        // Set initial width
+        $.style(letterNode, {
+          width: letter.symbolWidths[currentSymbolsIndex] + 'px'
+        });
+
+        function nextTransition(forcedIndex) {
+          if (isPaused) return false;
+          var randomSymbolIndex;
+          if (forcedIndex === undefined) {
+            while (randomSymbolIndex === undefined || randomSymbolIndex === currentSymbolsIndex) {
+              randomSymbolIndex = generateRandomInt(letter.symbols.length - 1);
+            }
+            currentSymbolsIndex = randomSymbolIndex;
+          } else {
+            currentSymbolsIndex = forcedIndex;
+          }
+          currentSpringBit = (currentSpringBit + 1) % 2;
+          letterSprings[letterIndex].setEndValue(currentSpringBit);
+          $.style(letterNode, {
+            width: letter.symbolWidths[currentSymbolsIndex] + 'px'
+          });
+          currentTimeout = setTimeout(nextTransition, 900 + Math.random() * 1200);
+        }
+        $.events(letterNode, {
+          lock: function() {
+            clearTimeout(currentTimeout);
+            nextTransition(0);
+          },
+          release: function() {
+            clearTimeout(currentTimeout);
+            nextTransition();
+          }
+        });
+        setTimeout(function() {
+          nextTransition();
+        }, animateInDelay);
+      });
+
+      // Trigger letter events
+      // isPaused is global
+      $.events($('#word'), {
+        mouseenter: function() {
+          $('html').className += ' inverted';
+          $$('.letter').forEach(function(thisLetter) {
+            $.fire(thisLetter, 'lock');
+          });
+          isPaused = true;
+        },
+        // Mobile tap triggers mouseenter.
+        // Natural way start animations again would be to just tap.
+        // This is why we have a click event as well.
+        click: function() {
+          if (isPaused) {
+            $.fire($('#word'), 'mouseleave');
+          }
+        },
+        mouseleave: function() {
+          $$('.letter').forEach(function(thisLetter) {
+            isPaused = false;
+            $('html').classList.remove('inverted');
+            $.fire(thisLetter, 'release');
+          });
+        }
+      });
+
+      // High-quality stagger animations
+      setTimeout(function() {
+        $('#word').className += ' visible';
+        $('#about').className += ' visible';
+      }, animateInDelay - 1000);
+    }
+  </script>
+</head>
+<body>
+  <div id="animation">
+    <div id="word">
+      <div class="letters cf">
+      </div>
+    </div>
+  </div>
+  <div id="about">
+    <div>
+      <strong><span id="inverted-spooky"></span> letters &middot; <span id="action-keyword"></span> to reveal</strong>
+      <br /><br />
+      built by <a href="https://github.com/tofuness">Dennis Jin</a> &middot; <a href="https://tofuness.com/">tofuness.com</a><br />
+      <a href="https://github.com/tofuness/eex">on Github</a> &middot; <a href="http://tofuness.github.io/eex/">view more eexperiments</a>
+      <br /><br />
+      <span id="credit" target="_blank">based on a <a href="https://vimeo.com/110351276">video</a> by Eric Hu</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -10,36 +10,34 @@
       box-sizing: border-box;
     }
     html {
+      overflow: hidden;
       font-family: Arial, sans-serif;
-      background: #fcfbff;
+      background: #000;
     }
     #about-description a, #about-description a:visited {
-      color: #7b37fb;
+      color: #fff;
       text-decoration: none;
-      box-shadow: 0 1px 0 #7b37fb;
+      box-shadow: 0 1px 0 #fff;
     }
     #about-description a:hover {
-      color: #7b37fb;
-      box-shadow: 0 2px 0 #7b37fb;
+      color: #fff;
+      box-shadow: 0 2px 0 #fff;
     }
     #eex {
       cursor: default;
-      padding: 0 8px;
-      color: #fff;
       font-weight: 700;
-      background: #5800ff;
     }
     #about {
-      padding: 30px;
-      color: #7b37fb;
+      color: #fff;
+      text-align: center;
     }
     #about-title {
-      padding-bottom: 10px;
-      font-size: 32px;
+      padding: 40px 20px 10px 20px;
+      font-size: 18px;
     }
     #about-description {
-      color: #7e7794;
-      font-size: 13px;
+      color: #999;
+      font-size: 12px;
       line-height: 1.5;
     }
     #about-list {
@@ -47,30 +45,50 @@
       width: 100%;
     }
     .about-item {
+      padding: 0 20px;
+      overflow: hidden;
       display: block;
+      margin-bottom: 20px;
       width: 100%;
-      color: #7e7794;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: #666;
       font-size: 82px;
       text-decoration: none;
+      text-align: center;
       transform: translateX(0);
       -webkit-transition: all 240ms cubic-bezier(0.165, 0.84, 0.44, 1);
       transition: all 240ms cubic-bezier(0.165, 0.84, 0.44, 1);
     }
     .about-item:hover {
-      color: #7b37fb;
-      transform: translateX(5px);
+      color: #fff;
+      transform: translateX(10px);
+    }
+    .latest {
+      padding: 0 10px;
+      background: #999;
+    }
+    @media (max-width : 730px) {
+      .mobile-newline:after {
+        content: '\a';
+        white-space: pre;
+      }
     }
   </style>
 </head>
 <body>
   <div id="about">
     <div id="about-title">
-      <span id="eex">eex</span> is a collection of web eexperiments.
+      <span id="eex">eex</span> is a collection of web eexperiments
     </div>
     <div id="about-description">
-      Built by <a href="https://github.com/tofuness">Dennis Jin</a> / <a href="https://tofuness.com">tofuness.com</a>. Open-sourced on <a href="https://github.com/tofuness/eex">Github</a>.
+      Built by <a href="https://github.com/tofuness">Dennis Jin</a> / <a href="https://tofuness.com">tofuness.com</a>.<span class="mobile-newline"></span>
+      Open-sourced on <a href="https://github.com/tofuness/eex">Github</a>.
     </div>
     <div id="about-list">
+      <a class="about-item" href="springy">
+        Springy Letters &#8625; <span class="latest">latest</span>
+      </a>
       <a class="about-item" href="einstein">
         Einstein Waves &#8625;
       </a>
@@ -90,9 +108,9 @@
     window.onload = function() {
       var items = document.querySelectorAll('.about-item');
       for (var i = 0; i < items.length; i++) {
-        window.fitText(items.item(i), 1, {
+        window.fitText(items.item(i), 1.5, {
           maxFontSize: 82,
-          minFontSize: 32
+          minFontSize: 11
         });
       }
     }
