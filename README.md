@@ -4,7 +4,7 @@
 
 ## ..eex?
 
-eex is a growing collection of creative pieces built using web technologies such as Canvas. I will try my best to regularly add new *eexperiments* to the repo and keep things interesting. Looking forward to learning lots of awesome things this year :goat:
+eex is a growing collection of creative code experiments built using web technologies such as Canvas. I will try my best to regularly add new *eexperiments* to the repo and keep things interesting. Looking forward to learning lots of awesome things this year :goat:
 
  Go ahead and visit the [project site](http://tofuness.github.io/eex/) if you haven't!
 
