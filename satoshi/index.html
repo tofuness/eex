@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+  THIS WILL NOT RUN ON MOBILE (NO PROPER ANALYSER SUPPORT?)
+  AND NEEDS TO BE RUN ON A SERVER (CORS) OR ELSE YOU GET:
+  "MediaElementAudioSource outputs zeroes due to CORS access restrictions for [...]"
+  -->
+  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <title>Satoshi Visualizer</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet" type="text/css">
+  <style>
+    /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+    html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:bold}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-0.5em}sub{bottom:-0.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{height:auto}input[type="search"]{-webkit-appearance:textfield;box-sizing:content-box}input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:bold}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}
+
+    html {
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      perspective: 3000px;
+      font-family: 'Roboto Mono';
+    }
+    html.inverted {
+      background: #1c1b1f;
+    }
+    #satoshi {
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -550px 0 0 -515px;
+      width: 1000px;
+      height: 1000px;
+      transform: rotateX(10deg) translateY(70px);
+      transform-origin: center center;
+      z-index: 10;
+      -webkit-transition: all 4000ms cubic-bezier(0.165, 0.84, 0.44, 1);
+      transition: all 4000ms cubic-bezier(0.165, 0.84, 0.44, 1);
+      -webkit-user-select: none;
+      user-select: none;
+      outline-style: none;
+    }
+    #satoshi.visible {
+      opacity: 1;
+      transform: rotateX(10deg) translateY(0);
+    }
+    #nakamoto {
+      display: none;
+      position: absolute;
+      z-index: 1000;
+    }
+    #input {
+      position: absolute;
+      opacity: 0;
+      top: 80px;
+      left: 50%;
+      width: 500px;
+      margin: 0 0 0 -250px;
+      color: #45fff6;
+      font-size: 10px;
+      text-align: center;
+      z-index: 1;
+    }
+    html.inverted #input {
+      opacity: 1;
+    }
+    #title {
+      z-index: 20;
+      position: absolute;
+      opacity: 0;
+      left: 50%;
+      top: 100px;
+      margin: 0 0 0 -170px;
+      color: #45fff6;
+      font-size: 10px;
+      transform: translateY(40px);
+      -webkit-transition: all 600ms cubic-bezier(0.075, 0.82, 0.165, 1);
+      transition: all 600ms cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+    html.inverted #title {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+    #border {
+      position: absolute;
+      opacity: 0;
+      top: 40px;
+      left: 40px;
+      right: 40px;
+      bottom: 40px;
+      border: 2px solid #45fff6;
+      transform: scale(1.1);
+      transform-origin: center center;
+      -webkit-transition: all 600ms cubic-bezier(0.075, 0.82, 0.165, 1);
+      transition: all 600ms cubic-bezier(0.075, 0.82, 0.165, 1);
+      border-radius: 2px;
+    }
+    html.inverted #border {
+      opacity: 1;
+      transform: scale(1);
+    }
+    #play-helper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -125px 0 0 -98px;
+      width: 200px;
+      font-size: 10px;
+      text-align: center;
+      -webkit-transition: all 600ms cubic-bezier(0.075, 0.82, 0.165, 1);
+      transition: all 600ms cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+    #play-helper.hidden {
+      opacity: 0;
+    }
+    #play {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -95px 0 0 -37px;
+      width: 70px;
+      height: 70px;
+      z-index: 20;
+      color: #fff;
+      background: #000;
+      border-radius: 50px;
+      border: 2px solid transparent;
+      transform-origin: center center;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+      -webkit-transition: all 600ms cubic-bezier(0.075, 0.82, 0.165, 1);
+      transition: all 600ms cubic-bezier(0.075, 0.82, 0.165, 1);
+      transform: scale(0.8);
+    }
+    #play:hover {
+      transform: scale(1);
+      box-shadow: 0 15px 32px rgba(0, 0, 0, 0.3);
+    }
+    #play:active {
+      transform: scale(0.8);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    }
+    #play.hidden {
+      opacity: 0;
+      transform: scale(0.2)!important;
+    }
+    html.inverted #play {
+      opacity: 0;
+      color: #45fff6;
+      border: 2px solid #45fff6;
+      background: none;
+      box-shadow: none;
+    }
+    #play svg {
+      padding: 20px 0 0 22px;
+      fill: currentColor;
+      width: 30px;
+      height: 30px;
+    }
+    .transaction {
+      opacity: 0;
+      height: 0;
+    }
+    #about {
+      position: absolute;
+      z-index: 20;
+      bottom: 80px;
+      left: 50%;
+      margin: 0 0 0 -136px;
+      color: #000;
+      font-size: 10px;
+      text-align: center;
+    }
+    html.inverted #about {
+      color: #45fff6;
+    }
+    #about a, #about a:visited {
+      color: #000;
+      text-decoration: underline;
+    }
+    html.inverted #about a, html.inverted #about a:visited {
+      color: #45fff6;
+      text-decoration: underline;
+    }
+    #about a:hover {
+      text-decoration: none!important;
+    }
+    @media (max-width : 730px) {
+    }
+  </style>
+</head>
+<body>
+  <div id="border"></div>
+  <audio id="nakamoto" controls false loop preload>
+    <source src="satoshi.ogg" type="audio/ogg">
+    <source src="satoshi.mp3" type="audio/mpeg">
+  </audio>
+  <div id="title">
+    Gramatik - Satoshi Nakamoto (feat. Adrian Lau &amp; ProbCause)
+  </div>
+  <div id="about">
+      <div>Built by <a href="https://github.com/tofuness">Dennis Jin</a> || <a href="https://tofuness.com/">tofuness.com</a></div>
+      <div><a href="https://github.com/tofuness/eex">Source code on Github</a> || <a href="http://tofuness.github.io/eex/">View more eexperiments</a></div>
+  </div>
+  <div id="input"></div>
+  <div id="satoshi"></div>
+  <div id="play-helper">
+    Turn on volume. Press play.
+  </div>
+  <div id="play">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" version="1.1" x="0px" y="0px"><g><path d="M24.9573396,9.90134267 C20.0103375,6.8572215 16,9.10794841 16,14.9158024 L16,85.8210389 C16,91.6345697 20.0172931,93.8753397 24.9573396,90.8354986 L81.7630583,55.8802896 C86.7100604,52.8361684 86.7031048,47.8963928 81.7630583,44.8565517 L24.9573396,9.90134267 Z"></path></g></svg>
+  </div>
+  <script src="pt.js"></script>
+  <script src="rebound.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      // Audio
+      var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var audioElement = document.getElementById('nakamoto');
+      var audioSrc = audioCtx.createMediaElementSource(audioElement);
+      var analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 512;
+      audioSrc.connect(analyser);
+      audioSrc.connect(audioCtx.destination);
+      audioElement.volume = 0.5;
+      audioElement.currentTime = 13;
+      var bufferLength = analyser.frequencyBinCount;
+      var dataArray = new Uint8Array(bufferLength);
+
+      // Pt
+      var space = new CanvasSpace('wecrypto', false).display('#satoshi');
+      space.refresh(false);
+      var form = new Form(space);
+
+      // Mouse
+      var mouseIsDown = false;
+
+      // BTC
+      var transactions = [];
+      var btcSocket = new WebSocket('wss://ws.blockchain.info/inv');
+      btcSocket.onopen = function(e) {
+        btcSocket.send(JSON.stringify({ 'op': 'unconfirmed_sub' }));
+      }
+      btcSocket.onmessage = function(e) {
+        if (transactions.length > 100) return;
+        JSON.parse(e.data).x.out.map(function(transaction) {
+          transactions.push({
+            value: transaction.value / 10e6,
+            addr: transaction.addr
+          });
+        });
+      }
+      btcSocket.onerror = function(e) {
+        // Welp
+        console.log(e);
+      }
+
+      // BTC stream
+      // BPM is 180, hence 1000 / 3
+      setInterval(function() {
+        if (audioElement.paused || !transactions.length) return;
+        document.getElementById('input').textContent = transactions[0].value + 'BTC → ' + transactions[0].addr;
+        transactions.shift();
+      }, 1000 / 3);
+
+      // Below is unused code.
+
+      // Click
+      window.addEventListener('mousedown', function() {
+        mouseIsDown = true;
+      });
+      window.addEventListener('mouseup', function() {
+        mouseIsDown = false;
+      });
+
+      // Touch events
+      window.addEventListener('touchstart', function() {
+        mouseIsDown = true;
+      });
+      window.addEventListener('touchend', function() {
+        mouseIsDown = false;
+      });
+
+      // Spring
+      var springSystem = new rebound.SpringSystem();
+      var spring = springSystem.createSpring(32, 3);
+      var springBit = 0;
+
+      // Other
+      var htmlEl = document.querySelector('html');
+      function beatDropped() {
+        return audioElement.currentTime > 21.3;
+      }
+
+      // Cloning is faster
+      var pts = [];
+      for (var i = 0; i < bufferLength; i++) {
+        pts.push(
+          new Vector(
+            space.size.x / 7 * (7 / 2 + Math.cos(i / bufferLength * 2 * Math.PI) * Math.min(dataArray[i] / 128.0, 1)),
+            space.size.y / 7 * (7 / 2 + Math.sin(i / bufferLength * 2 * Math.PI) * Math.min(dataArray[i] / 256.0, 1))
+          )
+        );
+      }
+
+      var timer = 0;
+      var afterImages = [];
+      var afterImageTones = [
+        'rgba(69, 255, 246, ' + 0.8 + ')',
+        'rgba(69, 255, 246, ' + 0.6 + ')',
+        'rgba(69, 255, 246, ' + 0.4 + ')',
+        'rgba(69, 255, 246, ' + 0.2 + ')',
+        'rgba(69, 255, 246, ' + 0.1 + ')'
+      ].reverse();
+
+      // Contract/Expand
+      setInterval(function() {
+        if (beatDropped() && !audioElement.paused) {
+          springBit = 1 - springBit;
+          spring.setEndValue(springBit);
+        } else {
+          spring.setEndValue(0);
+        }
+      }, 1000 / 1.5);
+
+      space.add({
+        animate: function(time, fps, ctx) {
+          timer = time % 300
+          if (timer > 1000 / 16 && beatDropped()) {
+            timer = 0;
+            space.clear();
+          } else if (!beatDropped()) {
+            space.clear();
+          }
+
+          ctx.globalCompositeOperation = 'destination-over';
+          if (beatDropped()) {
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#45fff6';
+            // xD
+            htmlEl.className.indexOf('inverted') === -1 ? htmlEl.className += ' inverted' : null;
+          } else {
+            ctx.shadowBlur = 0;
+            ctx.shadowColor = '#fff';
+            htmlEl.className = '';
+          }
+
+          // Put data into unsigned array
+          analyser.getByteTimeDomainData(dataArray);
+
+          var _pts = Util.clonePoints(pts);
+          for (var i = 0; i < bufferLength; i++) {
+            _pts[i].set(
+              space.size.x / 7 * (7 / 2 + Math.cos(i / bufferLength * 2 * Math.PI) * Math.min(dataArray[i] / 128.0, 1)),
+              space.size.y / 7 * (7 / 2 + Math.sin(i / bufferLength * 2 * Math.PI) * Math.min(dataArray[i] / 256.0, 1))
+            );
+            _pts[i].scale2D(
+              1 + spring.getCurrentValue() * 1.2,
+              1 + Math.sin(i / bufferLength * 2 * Math.PI) * spring.getCurrentValue() * 0.6,
+              new Point(space.size.x / 2, space.center.y - 100)
+            );
+          }
+
+          // Close the circle
+          _pts.push(_pts[0].clone());
+
+          var curve = new Curve().to(_pts);
+          form.stroke(beatDropped() ? '#45fff6' : '#222', audioElement.currentTime > 21.3 ? 2 : 1);
+          form.curve(curve.catmullRom());
+          if (beatDropped()) {
+            if (afterImages.length > 5) {
+              afterImages.shift();
+            }
+            afterImages.push(new Curve().to(Util.clonePoints(_pts)));
+            afterImages.map(function(image, index) {
+              form.stroke(afterImageTones[index], 2 / index);
+              form.curve(image.catmullRom());
+              return image.moveBy(0, 30, -index);
+            });
+          }
+        }
+      });
+
+      // On play
+      var playBtn = document.querySelector('#play');
+      var playHelpEl = document.querySelector('#play-helper');
+      playBtn.onclick = function() {
+        audioElement.paused ? audioElement.play() : audioElement.pause();
+        if (!audioElement.paused) {
+          playBtn.className += ' hidden';
+          playHelpEl.className += ' hidden';
+          document.querySelector('#satoshi').className += ' visible';
+        } else {
+          playBtn.className = '';
+          playHelpEl.className = '';
+        }
+      }
+
+      space.play();
+    }
+  </script>
+</body>
+</html>
