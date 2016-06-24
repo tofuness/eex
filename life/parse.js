@@ -1,6 +1,11 @@
 // Parses a 1.06 .lif file to stdout
 // Works on Node 6.10
 
+/*
+  Usage:
+  $ node parse.js somefile.lif | output
+ */
+
 const fs = require('fs');
 const os = require('os');
 const util = require('util');
