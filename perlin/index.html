@@ -62,7 +62,7 @@
     Perlin Flow Field
   </div>
   <div id="description">
-    Click to randomise the field.
+    1000 particles. Click to change the field.
   </div>
   <div id="field">
   </div>
@@ -87,7 +87,7 @@
 
       var xoff = 2;
       var yoff = 1;
-      var zoff = 47.62654157560373; // time offset
+      var zoff = 47.62654157560373;
       var inc = 0.07;
 
       for (var x = 0; x < n; x++) {
@@ -100,7 +100,7 @@
         }
       }
 
-      var m = 900;
+      var m = 1000;
       var particles = [];
 
       for (var i = 0; i < m; i++) {
@@ -150,9 +150,7 @@
               particles[i].play(time, fps > 20 ? 20 : fps);
               particles[i].impulse(field[index]);
               if (Math.random() > 0.96) {
-                var xSign = Math.random() < 0.5 ? -1 : 1;;
-                var ySign = Math.random() < 0.5 ? -1 : 1;
-                particles[i].impulse(new Vector(xSign * Math.random() * 5, ySign * Math.random() * 5));
+                particles[i].impulse(new Vector(Math.sin(time) * 4, Math.cos(time) * 4));
               }
               if (particles[i].x > space.size.x) particles[i].x = 0;
               if (particles[i].y > space.size.y) particles[i].y = 0;
@@ -171,7 +169,13 @@
       }
 
       document.getElementById('field').addEventListener('click', function() {
-        zoff += Math.random() * 10;
+        if (zoff === 47.62654157560373) {
+          zoff = 52.609239573145764;
+        } else  if (zoff === 52.609239573145764){
+          zoff = 88.07917363208351;
+        } else {
+          zoff += Math.random() * 100;
+        }
         console.log(zoff);
         updateField();
       });
