@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>
+    Perlin Field
+  </title>
+  <link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
+  <style type="text/css">
+    /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+    html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:bold}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-0.5em}sub{bottom:-0.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{height:auto}input[type="search"]{-webkit-appearance:textfield;box-sizing:content-box}input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:bold}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}
+
+    html {
+      background: #18191d;
+      width: 100%;
+      height: 100%;
+    }
+    #field {
+      position: absolute;
+      opacity: 0;
+      top: 50%;
+      left: 50%;
+      margin: -200px 0 0 -200px;
+      width: 400px;
+      height: 400px;
+      transition: 600ms opacity cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    #field.visible {
+      opacity: 1;
+    }
+    #title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 400px;
+      margin: -236px 0 0 -200px;
+      text-align: center;
+      opacity: 0.7;
+      color: #64ffdf;
+      font-size: 11px;
+      font-family: 'Space Mono', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      z-index: 2;
+    }
+    #description {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      width: 400px;
+      margin: 0 0 -236px -200px;
+      text-align: center;
+      color: #666;
+      font-size: 11px;
+      font-family: 'Space Mono', sans-serif;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+  <div id="title">
+    Perlin Flow Field
+  </div>
+  <div id="description">
+    Click to randomise the field.
+  </div>
+  <div id="field">
+  </div>
+  <script type="text/javascript" src="ifvisible.js"></script>
+  <script type="text/javascript" src="perlin.js"></script>
+  <script type="text/javascript" src="pt.js"></script>
+  <script type="text/javascript">
+    function map(n, min1, max1, min2, max2) {
+      return (n - min1) / (max1 - min1) * (max2 - min2) + min2;
+    }
+    window.onload = function() {
+      var space = new CanvasSpace('#field').setup({
+        bgcolor: '#18191d',
+        resize: false
+      });
+      space.refresh(true);
+      var form = new Form(space);
+
+      var n = 30;
+      var points = [];
+      var margin = space.size.$divide(n);
+
+      var xoff = 2;
+      var yoff = 1;
+      var zoff = 47.62654157560373; // time offset
+      var inc = 0.07;
+
+      for (var x = 0; x < n; x++) {
+        points[x] = [];
+        for (var y = 0; y< n; y++) {
+          points[x][y] = new Vector({
+            x: x * margin.x + margin.x / 2,
+            y: y * margin.y + margin.y / 2
+          });
+        }
+      }
+
+      var m = 900;
+      var particles = [];
+
+      for (var i = 0; i < m; i++) {
+        var col = Math.round(map(Math.random(), 0, 1, 0, n - 1));
+        var row = Math.round(map(Math.random(), 0, 1, 0, n - 1));
+        particles.push(
+          new Particle(points[col][row])
+        );
+      }
+
+      var field = [];
+      var fieldColors = [];
+      form.fill(false);
+
+      function updateField(x, y) {
+        yoff = 0;
+        for (var y = 0; y < n; y++) {
+          xoff = 0;
+          for (var x = 0; x < n; x++) {
+            xoff += inc;
+            var perlin = noise.perlin3(xoff, yoff, zoff);
+            var direction = points[x][y].clone().normalize().rotate2D(perlin * Math.PI * 2);
+            fieldColors[x + y * n] = Math.round(map(perlin, -1, 1, 67, 222));
+            field[x + y * n] = direction;
+          }
+          yoff += inc;
+        }
+      }
+
+      function addPerlinField() {
+        space.add({
+          animate: function(time, fps, ctx) {
+            for (var y = 0; y < n; y++) {
+              for (var x = 0; x < n; x++) {
+                var r = fieldColors[x + y * n];
+                form.stroke(`rgba(104, ${r}, 188, 0.3)`, 1);
+                form.line(new Line(points[x][y]).to(field[x + y * n].$multiply(7)).relative());
+              }
+            }
+            for (var i = 0; i < particles.length; i++) {
+              var x = Math.floor(particles[i].x / n);
+              var y = Math.floor(particles[i].y / n);
+              var index = x + y * n;
+              /*
+                When someone switches tabs, the
+               */
+              particles[i].play(time, fps > 20 ? 20 : fps);
+              particles[i].impulse(field[index]);
+              if (Math.random() > 0.96) {
+                var xSign = Math.random() < 0.5 ? -1 : 1;;
+                var ySign = Math.random() < 0.5 ? -1 : 1;
+                particles[i].impulse(new Vector(xSign * Math.random() * 5, ySign * Math.random() * 5));
+              }
+              if (particles[i].x > space.size.x) particles[i].x = 0;
+              if (particles[i].y > space.size.y) particles[i].y = 0;
+              if (particles[i].x < 0) particles[i].x = space.size.x;
+              if (particles[i].y < 0) particles[i].y = space.size.y;
+              if (particles[i].momentum.magnitude() > 10) particles[i].momentum.normalize().multiply(10);
+              form.stroke(`rgba(100, 255, 223, 0.4)`, 1);
+              form.line(new Line(particles[i]).to(particles[i].momentum).relative());
+            }
+            //form.points(particles, 0.1);
+            //zoff += 0.01;
+            //form.fill('#fff');
+            //form.text(new Point(0, 0), `${Math.round(1000 / fps)} FPS`, 100, 10, 20);
+          }
+        });
+      }
+
+      document.getElementById('field').addEventListener('click', function() {
+        zoff += Math.random() * 10;
+        console.log(zoff);
+        updateField();
+      });
+
+      addPerlinField();
+      updateField();
+
+      setTimeout(function() {
+        document.getElementById('field').classList.add('visible');
+        space.play();
+      }, 600);
+    }
+  </script>
+</body>
+</html>
