@@ -65,7 +65,6 @@
       display: none;
     }
     #play {
-      display: none;
       cursor: pointer;
       position: absolute;
       top: 50%;
@@ -74,22 +73,37 @@
       width: 60px;
       height: 60px;
       border-radius: 100px;
-      background: #111;
+      background: #fff;
       z-index: 3;
-      border: 2px solid #111;
       transform-origin: center center;
       transition: all 300ms cubic-bezier(0.165, 0.84, 0.44, 1);
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 10px 0 rgba(255, 255, 255, 0.05);
     }
+    #play svg {
+      padding: 14px 0 0 18px;
+      width: 30px;
+      fill: #111;
+    }
     #play:hover {
       transform: scale(1.2);
-      background: #111;
+      background: #fff;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.05);
     }
     #play.hidden {
       opacity: 0;
       transform: scale(0);
       transition: all 240ms cubic-bezier(0.95, 0.05, 0.795, 0.035);
+    }
+    #play-about {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      color: #fff;
+      margin-left: -100px;
+      width: 200px;
+      font-size: 11px;
+      font-family: 'Roboto', sans-serif;
+      text-align: center;
     }
     #title {
       overflow: hidden;
@@ -143,11 +157,13 @@
       HANNI EL KHATIB X FREDDIE GIBBS – “SATIN BLACK”
     </div>
   </div>
-  <audio id="satin" controls="false" autoplay loop preload>
-    <source src="satin.ogg" type="audio/ogg">
+  <audio id="satin" controls="false" loop preload>
     <source src="satin.mp3" type="audio/mpeg">
+    <source src="satin.ogg" type="audio/ogg">
   </audio>
   <div id="play">
+    <div id="play-about">Turn on sound. Press play.</div>
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" version="1.1" x="0px" y="0px"><g><path d="M24.9573396,9.90134267 C20.0103375,6.8572215 16,9.10794841 16,14.9158024 L16,85.8210389 C16,91.6345697 20.0172931,93.8753397 24.9573396,90.8354986 L81.7630583,55.8802896 C86.7100604,52.8361684 86.7031048,47.8963928 81.7630583,44.8565517 L24.9573396,9.90134267 Z"></path></g></svg>
   </div>
   <div id="lorenz">
   </div>
@@ -222,7 +238,7 @@
       audioSrc.connect(analyser);
       audioSrc.connect(audioCtx.destination);
       audioElement.volume = 0.5;
-      audioElement.currentTime = 2;
+      audioElement.currentTime = 2.6;
       var bufferLength = analyser.frequencyBinCount;
       var dataArray = new Uint8Array(bufferLength);
 
@@ -378,9 +394,9 @@
 
       document.querySelector('#play').addEventListener('click', function() {
         document.querySelector('#play').classList.add('hidden');
+        audioElement.play();
       });
 
-      audioElement.play();
       space.play();
     }
   </script>
