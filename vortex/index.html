@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vortex</title>
+  <style type="text/css">
+    /* Reset */
+    html, body, div, span, applet, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    b, u, i, center,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td,
+    article, aside, canvas, details, embed,
+    figure, figcaption, footer, header, hgroup,
+    menu, nav, output, ruby, section, summary,
+    time, mark, audio, video {
+    	margin: 0;
+    	padding: 0;
+    	border: 0;
+    	font-size: 100%;
+    	font: inherit;
+    	vertical-align: baseline;
+    }
+    article, aside, details, figcaption, figure,
+    footer, header, hgroup, menu, nav, section {
+    	display: block;
+    }
+    body {
+    	line-height: 1;
+    }
+    ol, ul {
+    	list-style: none;
+    }
+    blockquote, q {
+    	quotes: none;
+    }
+    blockquote:before, blockquote:after,
+    q:before, q:after {
+    	content: '';
+    	content: none;
+    }
+    table {
+    	border-collapse: collapse;
+    	border-spacing: 0;
+    }
+
+    /* Core */
+    html {
+      background: #f8fcff;
+    }
+    #vortex {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -300px 0 0 -300px;
+      width: 600px;
+      height: 600px;
+    }
+  </style>
+</head>
+<body>
+  <div id="vortex">
+  </div>
+  <script type="text/javascript" src="pt.min.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      var space = new CanvasSpace('vortex').setup({
+        bgcolor: '#f8fcff',
+        resize: true
+      });
+      var form = new Form(space);
+
+      // Lattice Boltzman method - JS implementation
+      // Dervided from http://www.cims.nyu.edu/~billbao/report930.pdf
+
+      // Microscopic velocity e_i for the D2Q9 model
+      const e = [
+        [0, 0],
+        [1, 0],
+        [0, 1],
+        [1, 0],
+        [0, -1],
+        [1, 1],
+        [1, 1],
+        [1, -1],
+        [1, -1]
+      ];
+
+      // Weights from Boltzmann distribution
+      const w = [
+        4 / 9,
+        1 / 9,
+        1 / 9,
+        1 / 9,
+        1 / 9,
+        1 / 36,
+        1 / 36,
+        1 / 36,
+        1 / 36
+      ];
+
+      const viscosity = 0.02;
+      const omega = 1 / (3 * viscosity + 0.5);
+
+      const rows = 100;
+      const cols = 100;
+
+
+      var grid = [];
+      for (var row = 0; row < rows; row++) {
+        grid.push([]);
+        for (var col = 0; col < cols; col++) {
+          grid[row].push([]);
+          for (var i = 0; i < 9; i++) {
+            // We only keep track of magnitude since we can derive
+            // direction using i. Also gives us better performance.
+            grid[row][col].push(0);
+          }
+        }
+      }
+
+      // Probability distribution function
+      function fi(row, col, i) {
+        return grid[row][col][i];
+      }
+
+      // Macroscopic fluid density
+      function rho(row, col) {
+        var density = 1;
+        for (var i = 0; i < 9; i++) {
+          density += fi(row, col, i);
+        }
+        return denstiy;
+      }
+
+      // Macroscopic velocity
+      function u(row, col) {
+        // No idea what this c is (constant?). I just put it at 1.
+        var c = 1;
+        var velocity = 0;
+        for (var i = 0; i < 9; i++) {
+          velocity += fi(row, col, i);
+        }
+        return sum / rho(row, col);
+      }
+
+      function fi_eq(row, col, i) {
+        var r = rho(row, col);
+        return (
+          w[i] * r * (
+            1 + (3 * ())
+          )
+        );
+      }
+
+      function streamStep() {
+
+      }
+
+      console.log(u(0, 10));
+
+      space.add({
+        animate: function(time, fps, ctx) {
+
+        }
+      });
+
+      space.play();
+    }
+  </script>
+</body>
+</html>

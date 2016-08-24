@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vortex</title>
+  <style type="text/css">
+    /* Reset */
+    html, body, div, span, applet, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    b, u, i, center,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td,
+    article, aside, canvas, details, embed,
+    figure, figcaption, footer, header, hgroup,
+    menu, nav, output, ruby, section, summary,
+    time, mark, audio, video {
+    	margin: 0;
+    	padding: 0;
+    	border: 0;
+    	font-size: 100%;
+    	font: inherit;
+    	vertical-align: baseline;
+    }
+    article, aside, details, figcaption, figure,
+    footer, header, hgroup, menu, nav, section {
+    	display: block;
+    }
+    body {
+    	line-height: 1;
+    }
+    ol, ul {
+    	list-style: none;
+    }
+    blockquote, q {
+    	quotes: none;
+    }
+    blockquote:before, blockquote:after,
+    q:before, q:after {
+    	content: '';
+    	content: none;
+    }
+    table {
+    	border-collapse: collapse;
+    	border-spacing: 0;
+    }
+
+    /* Core */
+    html {
+      background: #f8fcff;
+    }
+    #diffusion {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -200px 0 0 -200px;
+      width: 400px;
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div id="diffusion">
+  </div>
+  <script type="text/javascript" src="pt.min.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      var space = new CanvasSpace('diffusion').setup({
+        bgcolor: '#f8fcff',
+        resize: true,
+        retina: true
+      });
+      var form = new Form(space);
+
+      var grid = [];
+      var nextGrid = [];
+      var cols = 100;
+      var rows = 100;
+      for (var x = 0; x < cols; x++) {
+        grid.push([]);
+        nextGrid.push([]);
+        for (var y = 0; y < rows; y++) {
+          grid[x].push({
+            a: 1,
+            b: 0
+          });
+          nextGrid[x].push({
+            a: 1,
+            b: 0
+          });
+        }
+      }
+
+      var points = [];
+      for (var x = 0; x < cols; x++) {
+        for (var y = 0; y < rows; y++) {
+          points.push(
+            new Point({
+              x: x / cols * space.size.x,
+              y: y / rows * space.size.y
+            })
+          );
+        }
+      }
+
+      for (var x = 95 - 50; x < 105 - 50; x++) {
+        for (var y = 95 - 50; y < 105 - 50; y++) {
+          grid[x][y].b = 1;
+        }
+      }
+
+
+      var dA = 1;
+      var dB = 0.5;
+      var feed = 0.055;
+      var kill = 0.062;
+
+      function laplace(x, y, variable) {
+        var sum = 0;
+        sum += grid[x][y][variable] * -1;
+        sum += grid[x - 1][y][variable] * 0.2;
+        sum += grid[x + 1][y][variable] * 0.2;
+        sum += grid[x][y - 1][variable] * 0.2;
+        sum += grid[x][y + 1][variable] * 0.2;
+        sum += grid[x - 1][y - 1][variable] * 0.05;
+        sum += grid[x + 1][y - 1][variable] * 0.05;
+        sum += grid[x + 1][y + 1][variable] * 0.05;
+        sum += grid[x - 1][y + 1][variable] * 0.05;
+        return sum;
+      }
+      function updateGrid() {
+        var tempGrid = grid;
+        for (var x = 1; x < cols - 1; x++) {
+          for (var y = 1; y < rows - 1; y++) {
+            var a = grid[x][y].a;
+            var b = grid[x][y].b;
+            nextGrid[x][y].a = a + (dA * laplace(x, y, 'a') - a * b * b + feed * (1 - a)) * 1;
+            nextGrid[x][y].b = b + (dB * laplace(x, y, 'b') + a * b * b - (kill + feed) * b) * 1;
+          }
+        }
+        grid = nextGrid;
+        nextGrid = tempGrid;
+      }
+      console.time('tick');
+      updateGrid();
+      console.log(grid[40][40]);
+
+      console.timeEnd('tick');
+      console.time('tick');
+      updateGrid();
+      console.timeEnd('tick');
+      console.time('tick');
+      updateGrid();
+      console.timeEnd('tick');
+
+      space.add({
+        animate: function(time, fps, ctx) {
+          for (var i = 0; i < 20; i++) {
+            updateGrid();
+          }
+          for (var x = 0; x < cols; x++) {
+            for (var y = 0; y < rows; y++) {
+              form.stroke(false);
+              var a = nextGrid[x][y].a
+              var b = nextGrid[x][y].b;
+              if (Math.abs(a - b) < 0.5) {
+                form.fill(`
+                  rgba(
+                    ${
+                      Math.floor(Util.mapToRange(a, 0, 1, 37, 170))
+                    },
+                    ${
+                      Math.floor(Util.mapToRange(a, 0, 1, 50, 220))
+                    },
+                    207,
+                    1
+                  )
+                `);
+                form.point(points[x + y * cols], 1, false);
+              } else {
+                // return
+                //form.fill('#fff');
+              }
+            }
+          }
+          // form.fill('#000');
+          // form.text(new Point(10, 20), `${Math.round(1000 / fps)} fps`, 1000, 10, 10);
+        }
+      });
+      space.play();
+    }
+  </script>
+</body>
+</html>
