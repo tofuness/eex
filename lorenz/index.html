@@ -237,7 +237,7 @@
       analyser.fftSize = 512;
       audioSrc.connect(analyser);
       audioSrc.connect(audioCtx.destination);
-      audioElement.volume = 0.35;
+      audioElement.volume = 0.3;
       audioElement.currentTime = 2.6;
       var bufferLength = analyser.frequencyBinCount;
       var dataArray = new Uint8Array(bufferLength);
