@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed|Roboto" rel="stylesheet">
   <style>
     /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
     html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:bold}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-0.5em}sub{bottom:-0.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{height:auto}input[type="search"]{-webkit-appearance:textfield;box-sizing:content-box}input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:bold}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}
@@ -13,53 +13,158 @@
     html {
       width: 100%;
       height: 100%;
-      background: #4b405a;
+      background: #111;
       overflow: hidden;
       text-rendering: geometricPrecision;
+    }
+    html.active1 {
+      background: #fffcb2;
+    }
+    html.active2 {
+      background: #b0ffac;
+    }
+    html.active3 {
+      background: #7862ff;
+    }
+    html.active4 {
+      background: #d54e91;
+    }
+    html.active5 {
+      background: #4b405a;
     }
     #lorenz {
       position: absolute;
       top: 0;
-      left: 0;
-      /*margin: -300px 0 0 -300px;*/
-      width: 100%;
+      left: 50%;
+      margin-left: -300px;
+      width: 600px;
       height: 100%;
-      z-index: 2;
+      z-index: 0;
+    }
+    canvas {
+      transform: scale(0.07);
+      transform-origin: center center;
+      transition: all 200ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    canvas.active1 {
+      transform: scale(0.2);
+    }
+    canvas.active2 {
+      transform: scale(0.3);
+    }
+    canvas.active3 {
+      transform: scale(0.4);
+    }
+    canvas.active4 {
+      transform: scale(0.5);
+    }
+    canvas.active5 {
+      transform: scale(1);
+    }
+    #satin {
+      display: none;
+    }
+    #play {
+      display: none;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -30px 0 0 -30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 100px;
+      background: #111;
+      z-index: 3;
+      border: 2px solid #111;
+      transform-origin: center center;
+      transition: all 300ms cubic-bezier(0.165, 0.84, 0.44, 1);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 10px 0 rgba(255, 255, 255, 0.05);
+    }
+    #play:hover {
+      transform: scale(1.2);
+      background: #111;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.05);
+    }
+    #play.hidden {
+      opacity: 0;
+      transform: scale(0);
+      transition: all 240ms cubic-bezier(0.95, 0.05, 0.795, 0.035);
+    }
+    #title {
+      overflow: hidden;
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      margin-left: -125px;
+      color: #ff506d;
+      font-size: 12px;
+      font-family: 'Roboto Condensed', sans-serif;
+      z-index: 3;
+    }
+    #title-inner {
+      transform: translateY(20px);
+      transition: all 400ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    #title-inner.visible {
+      transform: translateY(0);
     }
     #about {
       position: absolute;
-      top: 50%;
       left: 50%;
+      bottom: 100px;
+      margin-left: -150px;
+      width: 300px;
+      opacity: 0;
+      color: #d5dc91;
+      font-family: 'Roboto', sans-serif;
+      font-size: 12px;
+      text-align: center;
+      transition: all 2000ms cubic-bezier(0.165, 0.84, 0.44, 1);
+      z-index: 3;
+      line-height: 1.5;
     }
-    #title {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      margin: -95px 0 0 -230px;
-      color: #f6f4f9;
-      font-size: 80px;
-      font-family: 'Raleway', sans-serif;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+    #about.visible {
+      opacity: 1;
+    }
+    #about a, #about a:visited {
+      color: #ff506d;
+      text-decoration: none;
+      box-shadow: 0 1px 0 #ff506d;
+    }
+    #about a:hover {
+      box-shadow: none;
     }
   </style>
 </head>
 <body>
-  <div id="about">
-
-  </div>
   <div id="title">
-    Lorenz<br />
-    Attractor
+    <div id="title-inner">
+      HANNI EL KHATIB X FREDDIE GIBBS – “SATIN BLACK”
+    </div>
+  </div>
+  <audio id="satin" controls false loop preload>
+    <source src="satin.mp3" type="audio/mpeg">
+    <source src="steven.ogg" type="audio/ogg">
+  </audio>
+  <div id="play">
   </div>
   <div id="lorenz">
+  </div>
+  <div id="about">
+    <div>Built by <a href="https://github.com/tofuness">Dennis Jin</a> / <a href="https://tofuness.com/">tofuness.com</a></div>
+    <div><a href="https://github.com/tofuness/eex">Source code on Github</a> / <a href="http://tofuness.github.io/eex/">View more eexperiments</a></div>
   </div>
   <script type="text/javascript" src="pt.js"></script>
   <script type="text/javascript">
     window.onload = function() {
-      var space = new CanvasSpace('attractor').display('#lorenz').autoResize(true);
+      var space = new CanvasSpace('lorenz').setup({
+        bgcolor: '#4b405a',
+        resize: true,
+        retina: true
+      });
       var form = new Form(space);
-      space.refresh(true);
+      space.refresh(false);
 
       var sigma = 10;
       var rho = 28;
@@ -67,8 +172,8 @@
       var x = 1;
       var y = 1;
       var z = 1;
-      var dt = 0.01;
-      var maxPoints = 900;
+      var dt = 0.018;
+      var maxPoints = 1200;
       var points = [];
 
       function addPoint() {
@@ -89,15 +194,14 @@
         if (points.length > maxPoints) points.shift();
       }
 
-      for (var i = 0; i < 2000; i++) {
+      for (var i = 0; i < maxPoints + 1000; i++) {
         addPoint();
       }
 
       // Mouse stuff
       var mouse = new Circle(space.size.$multiply(0.5)).setRadius(1);
       var anchor = mouse.clone();
-      var easing = 0.05;
-      var shouldZoom = true;
+      var easing = 0.03;
 
       // Rotation
       var debounce = 0;
@@ -110,14 +214,81 @@
 
       form.fill('transparent');
 
+      var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var audioElement = document.getElementById('satin');
+      var audioSrc = audioCtx.createMediaElementSource(audioElement);
+      var analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 512;
+      audioSrc.connect(analyser);
+      audioSrc.connect(audioCtx.destination);
+      audioElement.volume = 0.5;
+      audioElement.currentTime = 2;
+      var bufferLength = analyser.frequencyBinCount;
+      var dataArray = new Uint8Array(bufferLength);
+
+      var colorState = 0;
+      setInterval(() => {
+        if (audioElement.currentTime > 4.7 && audioElement.currentTime < 5) {
+          document.querySelector('#lorenz canvas').classList.add('active1');
+          document.querySelector('html').classList.add('active1');
+          colorState = 1;
+        } else if (audioElement.currentTime > 5 && audioElement.currentTime < 5.35) {
+          document.querySelector('#lorenz canvas').classList.add('active2');
+          document.querySelector('html').classList.add('active2');
+          colorState = 2;
+        } else if (audioElement.currentTime > 5.35 && audioElement.currentTime < 5.65) {
+          document.querySelector('#lorenz canvas').classList.add('active3');
+          document.querySelector('html').classList.add('active3');
+          colorState = 3;
+        } else if (audioElement.currentTime > 5.65 && audioElement.currentTime < 6.05){
+          document.querySelector('#lorenz canvas').classList.add('active4');
+          document.querySelector('html').classList.add('active4');
+          colorState = 4;
+        } else if (audioElement.currentTime > 6.13) {
+          document.querySelector('#title-inner').classList.add('visible');
+          document.querySelector('#about').classList.add('visible');
+          document.querySelector('#lorenz canvas').classList.add('active5');
+          document.querySelector('html').classList.add('active5');
+          colorState = 5;
+        } else {
+          document.querySelector('#title-inner').classList.remove('visible');
+          document.querySelector('#about').classList.remove('visible');
+          document.querySelector('#lorenz canvas').classList.remove('active1');
+          document.querySelector('#lorenz canvas').classList.remove('active2');
+          document.querySelector('#lorenz canvas').classList.remove('active3');
+          document.querySelector('#lorenz canvas').classList.remove('active4');
+          document.querySelector('#lorenz canvas').classList.remove('active5');
+          document.querySelector('html').classList.remove('active1');
+          document.querySelector('html').classList.remove('active2');
+          document.querySelector('html').classList.remove('active3');
+          document.querySelector('html').classList.remove('active4');
+          document.querySelector('html').classList.remove('active5');
+          colorState = 0;
+        }
+      }, 50);
+
+      var lorenzColors = [
+        '#ccc',
+        '#28ffe8',
+        '#e89ce2',
+        '#e4dfff',
+        '#d5dc91',
+        '#ff506d'
+      ]
+
+      var backgroundColors
+
       space.add({
         animate: function(time, fps, ctx) {
+          analyser.getByteTimeDomainData(dataArray);
+          ctx.clearRect(0, 0, space.size.x, space.size.y);
+
           if (time - debounce > revolutionDuration) {
             debounce = time;
           }
 
           // Move mouse
-          var distance = mouse.distance(anchor );
+          var distance = mouse.distance(anchor);
           var delta = mouse.$subtract(anchor).multiply(easing);
           if (distance > 0.5) {
             anchor.moveBy({
@@ -136,34 +307,55 @@
           // Don't mutate points, clone instead.
           var _points = [];
           for (var i = 0; i < points.length; i++) {
+            var dataArrayIndex = (i % bufferLength);
+
             _points[i] = points[i].clone().rotate2D((time - debounce) / revolutionDuration * Math.PI * 2 * shouldRotate, space.center, Const.xz);
-            _points[i] = _points[i].moveBy(1 * Math.sin(i / 30), 1 * Math.cos(i / 30));
-            if (shouldZoom) {
-              _points[i] = _points[i].scale2D(5, 5, space.center);
+            _points[i] = _points[i].moveBy(
+              10 * Math.sin(i / 30),
+              10 * Math.cos(i / 30)
+            );
+
+            var damping = 0.8;
+            if (audioElement.currentTime > 51.8 && audioElement.currentTime < 81) {
+              damping = 0.1;
             }
-            var distanceToMouse = _points[i].distance(anchor);
-            if (distanceToMouse < 300) {
-              //_points[i] = _points[i].moveBy(Math.random() * (100 - distanceToMouse) / 100 * 10, Math.random() * (100 - distanceToMouse) / 100 * 10);
+            if (_points[i].distance(points[i + 1]) < 20) {
+              _points[i] = _points[i].moveBy(
+                i % 4 === 0 ? 0.1 * (dataArray[dataArrayIndex] - 128) : 0,
+                damping * (dataArray[dataArrayIndex] - 128)
+              );
             }
+            _points[i] = _points[i].scale2D(1.2, 1.2, space.center);
+          }
+
+
+          if (Math.random() > 0.7 && audioElement.currentTime > 6.1) {
+            var glitchCurveBlue = new Curve().to(_points);
+            glitchCurveBlue.moveBy(Util.randomRange(-1, 1) * 5, Util.randomRange(-1, 1) * 5);
+            form.stroke(lorenzColors[1], 0.5, 'round');
+            form.curve(glitchCurveBlue.catmullRom());
+          }
+          if (Math.random() > 0.8 && audioElement.currentTime > 6.1) {
+            var glitchCurveYellow = new Curve().to(_points);
+            glitchCurveYellow.moveBy(Util.randomRange(-1, 1) * 10, Util.randomRange(-1, 1) * 10);
+            form.stroke(lorenzColors[4], 0.5, 'round');
+            form.curve(glitchCurveYellow.catmullRom());
           }
 
           var curve = new Curve().to(_points);
-          curve.is3D = true;
           curve = curve.catmullRom();
-          //form.curve(curve);
 
           if (curve.length === 0) return;
           var prevDistance = 0;
           ctx.beginPath();
           for (var i = 2; i < curve.length; i++) {
             ctx.moveTo(curve[i - 2].x, curve[i - 2].y);
-            //ctx.moveTo(space.size.x / 2 + curve[i].x / 4, space.size.y / 2 + curve[i].y / 4);
             maxZ = Math.max(curve[i].z, maxZ);
             minZ = Math.min(curve[i].z, maxZ);
             var pairDistance = Math.sqrt(Math.pow(curve[i].x - curve[i - 1].x, 2) + Math.pow(curve[i].y - curve[i - 1].y, 2));
-            form.stroke('#ff506d', pairDistance / 2, 'round');
             ctx.lineTo(curve[i].x, curve[i].y);
-            if (i % 10 === 0) {
+            form.stroke(lorenzColors[colorState], pairDistance / 2, 'round');
+            if (i % 300 === 0) {
               ctx.stroke();
               ctx.closePath();
               ctx.beginPath();
@@ -174,9 +366,6 @@
       });
 
       var lorenzEl = document.getElementById('lorenz');
-      window.addEventListener('click', function(e) {
-        console.log('Points: ', points.length);
-      });
       window.addEventListener('resize', function(e) {
         points = [];
         for (var i = 0; i < maxPoints; i++) {
@@ -187,6 +376,11 @@
         mouse.set(e.clientX, e.clientY);
       });
 
+      document.querySelector('#play').addEventListener('click', function() {
+        document.querySelector('#play').classList.add('hidden');
+      });
+
+      audioElement.play();
       space.play();
     }
   </script>
