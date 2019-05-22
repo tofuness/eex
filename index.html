@@ -1,38 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>eex - collection of web eexperiments</title>
+  <head>
+    <meta charset="utf-8" />
+    <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>eex - collection of web eexperiments</title>
 
-   <!-- Open Graph data -->
-  <meta property="og:title" content="eex - collection of web eexperiments" />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://tofuness.github.io/eex/ogimage.png" />
-  <meta property="og:description" content="eex is a growing collection of creative code experiments built using web technologies such as Canvas and JavaScript. Updated on a regular basis." />
+    <!-- Open Graph data -->
+    <meta property="og:title" content="eex - collection of web eexperiments" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:image"
+      content="https://tofuness.github.io/eex/ogimage.png"
+    />
+    <meta
+      property="og:description"
+      content="eex is a growing collection of creative code experiments built using web technologies such as Canvas and JavaScript. Updated on a regular basis."
+    />
 
-  <!-- Twitter Card data -->
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:site" content="@nobletofu" />
-  <meta name="twitter:title" content="eex - collection of web eexperiments" />
-  <meta name="twitter:description" content="eex is a growing collection of creative code experiments built using web technologies such as Canvas and JavaScript. Updated on a regular basis." />
-  <meta name="twitter:image" content="https://tofuness.github.io/eex/ogimage.png" />
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@seldom" />
+    <meta name="twitter:title" content="eex - collection of web eexperiments" />
+    <meta
+      name="twitter:description"
+      content="eex is a growing collection of creative code experiments built using web technologies such as Canvas and JavaScript. Updated on a regular basis."
+    />
+    <meta
+      name="twitter:image"
+      content="https://tofuness.github.io/eex/ogimage.png"
+    />
 
-  <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400|Space+Mono" rel="stylesheet">
-  <style>
-    /* Reset */
-    a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}
+    <link
+      href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400|Space+Mono"
+      rel="stylesheet"
+    />
+    <style>
+      /* Reset */
+      a,
+      abbr,
+      acronym,
+      address,
+      applet,
+      article,
+      aside,
+      audio,
+      b,
+      big,
+      blockquote,
+      body,
+      canvas,
+      caption,
+      center,
+      cite,
+      code,
+      dd,
+      del,
+      details,
+      dfn,
+      div,
+      dl,
+      dt,
+      em,
+      embed,
+      fieldset,
+      figcaption,
+      figure,
+      footer,
+      form,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      header,
+      hgroup,
+      html,
+      i,
+      iframe,
+      img,
+      ins,
+      kbd,
+      label,
+      legend,
+      li,
+      mark,
+      menu,
+      nav,
+      object,
+      ol,
+      output,
+      p,
+      pre,
+      q,
+      ruby,
+      s,
+      samp,
+      section,
+      small,
+      span,
+      strike,
+      strong,
+      sub,
+      summary,
+      sup,
+      table,
+      tbody,
+      td,
+      tfoot,
+      th,
+      thead,
+      time,
+      tr,
+      tt,
+      u,
+      ul,
+      var,
+      video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font: inherit;
+        vertical-align: baseline;
+      }
+      article,
+      aside,
+      details,
+      figcaption,
+      figure,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      section {
+        display: block;
+      }
+      body {
+        line-height: 1;
+      }
+      ol,
+      ul {
+        list-style: none;
+      }
+      blockquote,
+      q {
+        quotes: none;
+      }
+      blockquote:after,
+      blockquote:before,
+      q:after,
+      q:before {
+        content: '';
+        content: none;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
 
-    /* Fonts */
-    .space {
-      font-family: 'Space Mono', monospace;
-    }
-    .libre {
-      font-family: 'Libre Baskerville', serif;
-    }
+      /* Fonts */
+      .space {
+        font-family: 'Space Mono', monospace;
+      }
+      .libre {
+        font-family: 'Libre Baskerville', serif;
+      }
 
-    /*
+      /*
     Colors
     * Pearl: #fffdec
     * Pine: #79a452
@@ -40,294 +176,325 @@
     * Despair: #2d2d2b
      */
 
-    /* Site */
-    * {
-      box-sizing: border-box;
-    }
-    a, a:visited {
-      text-decoration: none;
-    }
-    html {
-      color: #2d2d2b;
-      font-size: 12px;
-      background: #fffdec;
-    }
-    #header {
-      padding: 80px 0;
-      width: 100%;
-      text-align: center;
-      text-transform: uppercase;
-    }
-    #header-meta {
-      margin-top: 10px;
-      color: #7d7a5d;
-    }
-    #header-meta a, #header-meta a:visited {
-      color: #7d7a5d;
-      box-shadow: 0 1px 0 #7d7a5d;
-    }
-    #header-meta a:hover {
-      color: #79a452;
-      box-shadow: 0 2px 0 #79a452;
-    }
-    #experiments {
-      margin: 0 auto;
-      padding-bottom: 40px;
-      width: 100%;
-      text-align: center;
-    }
-    .experiment {
-      overflow: hidden;
-    }
-    .experiment-link {
-      cursor: pointer;
-      color: #2d2d2b;
-      display: inline-block;
-      margin-bottom: 40px;
-      padding: 0 40px;
-      letter-spacing: 0;
-    }
-    .experiment-link:hover {
-      color: #ff5c3c;
-      transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
-    }
-    .experiment-link.visible {
-      transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
-    }
-    .experiment-link:hover .experiment-link__latest {
-      color: #fff;
-      background: #ff5c3c;
-    }
-    .experiment-link__latest {
-      display: inline-block;
-      padding: 10px 10px 0 10px;
-      color: #fffdec;
-      background: #2d2d2b;
-    }
-    #background {
-      opacity: 0;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: -1;
-      transition: all 2000ms cubic-bezier(0.165, 0.84, 0.44, 1);
-    }
-    #background.visible {
-      opacity: 1;
-    }
-    @media (max-width : 900px) {
+      /* Site */
+      * {
+        box-sizing: border-box;
+      }
+      a,
+      a:visited {
+        text-decoration: none;
+      }
+      html {
+        color: #2d2d2b;
+        font-size: 12px;
+        background: #fffdec;
+      }
       #header {
-        padding: 20px;
+        padding: 80px 0;
+        width: 100%;
+        text-align: center;
+        text-transform: uppercase;
       }
       #header-meta {
-        line-height: 1.5;
+        margin-top: 10px;
+        color: #7d7a5d;
+      }
+      #header-meta a,
+      #header-meta a:visited {
+        color: #7d7a5d;
+        box-shadow: 0 1px 0 #7d7a5d;
+      }
+      #header-meta a:hover {
+        color: #79a452;
+        box-shadow: 0 2px 0 #79a452;
+      }
+      #experiments {
+        margin: 0 auto;
+        padding-bottom: 40px;
+        width: 100%;
+        text-align: center;
+      }
+      .experiment {
+        overflow: hidden;
       }
       .experiment-link {
-        margin-bottom: 20px;
-        padding: 0 20px;
+        cursor: pointer;
+        color: #2d2d2b;
+        display: inline-block;
+        margin-bottom: 40px;
+        padding: 0 40px;
+        letter-spacing: 0;
       }
-    }
-  </style>
-</head>
-<body>
-  <header id="header">
-    <div id="header-title" class="space">
-      eex - collection of web eexperiments
-    </div>
-    <div id="header-meta" class="space">
-      Built by <a href="https://github.com/tofuness">Dennis Jin</a> / <a href="https://tofuness.com">tofuness.com</a>.<span class="mobile-newline"></span>
-      Open-sourced on <a href="https://github.com/tofuness/eex">Github</a>.
-    </div>
-  </header>
-  <div id="experiments">
-    <div class="experiment">
-      <a class="experiment-link libre" href="radial">
-        Radial Wave Engine <span class="experiment-link__latest">latest</span>
-      </a>
-    </div>
-    <div class="experiment">
-      <a class="experiment-link libre" href="lorenz">
-        Lorenz Visualizer
-      </a>
-    </div>
-    <div class="experiment">
-      <a class="experiment-link libre" href="life">
-        Canvas Life
-      </a>
-    </div>
-    <div class="experiment">
-      <a class="experiment-link libre" href="satoshi">
-        Satoshi Visualizer
-      </a>
-    </div>
-    <div class="experiment">
-      <a class="experiment-link libre" href="moire">
-        Moiré Pattern
-      </a>
-    </div>
-    <div class="experiment">
-      <a class="experiment-link libre" href="springy">
-        Springy Letters
-      </a>
-    </div>
-    <div class="experiment">
-      <a class="experiment-link libre" href="einstein">
-        Einstein Waves
-      </a>
-    </div>
-    <div class="experiment">
-      <a class="experiment-link libre" href="vectorfield">
-        Vector Field
-      </a>
-    </div>
-    <div class="experiment">
-      <a class="experiment-link libre" href="book">
-        Studies in a Dying Culture
-      </a>
-    </div>
-    <div class="experiment">
-      <a class="experiment-link libre" href="sine">
-        Sine Wave and Circles
-      </a>
-    </div>
-  </div>
-  <div id="background">
-  </div>
-  <script type="text/javascript" src="fittext.js"></script>
-  <script type="text/javascript" src="perlin.js"></script>
-  <script type="text/javascript" src="pt.min.js"></script>
-  <script type="text/javascript">
-    window.onload = function() {
-      var space = new CanvasSpace('background').setup({
-        bgcolor: 'transparent',
-        resize: true
-      });
-      var form = new Form(space);
-      var xbase = 0;
-      var xoff = 0;
-      var xTotalShift = 2.5;
-      var yoff = 30;
-      var yTotalShift = 2.5;
-      var yFocalPoint = space.center.y;
-      var zoff = 30;
-
-      var lineCount = 8;
-      var lineMargin = space.size.$divide(lineCount);
-      var pointCount = 80;
-      var pointMargin = space.size.$divide(pointCount);
-
-      /* Hover action */
-      var hoverActive = false;
-
-      function calculateMargins() {
-        lineMargin = space.size.$divide(lineCount);
-        pointMargin = space.size.$divide(pointCount);
+      .experiment-link:hover {
+        color: #ff5c3c;
+        transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
       }
-      window.addEventListener('resize', function() {
-        calculateMargins();
-      });
-      function handleMouseOver(index) {
-        hoverActive = true;
-        calculateMargins();
+      .experiment-link.visible {
+        transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
       }
-      function handleMouseLeave(index) {
-        hoverActive = false;
-        calculateMargins();
+      .experiment-link:hover .experiment-link__latest {
+        color: #fff;
+        background: #ff5c3c;
       }
-
-
-      setTimeout(function() {
-        document.querySelector('#background').classList.add('visible');
-      }, 500);
-      setTimeout(function() {
-        Array.prototype.slice.call(document.querySelectorAll('.experiment'))
-        .map(function(element, index) {
-          element.classList.add('visible');
-        });
-      }, 600);
-
-      var items = document.querySelectorAll('.experiment');
-      for (var i = 0; i < items.length; i++) {
-        window.fitText(items.item(i), 1.5, {
-          maxFontSize: 72,
-          minFontSize: 11
-        });
+      .experiment-link__latest {
+        display: inline-block;
+        padding: 10px 10px 0 10px;
+        color: #fffdec;
+        background: #2d2d2b;
       }
-
-      // target: [0, 1]
-      var hoverEasing = 0;
-      var hoverEasingTarget = 0;
-      function easeInOutCubic(t) {
-        return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+      #background {
+        opacity: 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        transition: all 2000ms cubic-bezier(0.165, 0.84, 0.44, 1);
       }
-      function fadeToColor(rgbColor1, rgbColor2, ratio) {
-        var color1 = rgbColor1.substring(4, rgbColor1.length - 1).split(',');
-        var color2 = rgbColor2.substring(4, rgbColor2.length - 1).split(',');
-        var difference;
-        var newColor = [];
-        for (var i = 0; i < color1.length; i++) {
-          difference = color2[i] - color1[i];
-          newColor.push(Math.floor(parseInt(color1[i], 10) + difference * ratio));
+      #background.visible {
+        opacity: 1;
+      }
+      @media (max-width: 900px) {
+        #header {
+          padding: 20px;
         }
-        return 'rgb(' + newColor + ')';
+        #header-meta {
+          line-height: 1.5;
+        }
+        .experiment-link {
+          margin-bottom: 20px;
+          padding: 0 20px;
+        }
       }
-
-      // Convert NodeList to array of elements
-      Array.prototype.slice.call(document.querySelectorAll('.experiment-link'))
-      .map(function(element, index) {
-        element.addEventListener('mouseover', function(e) {
-          handleMouseOver(index);
-          hoverEasingTarget = 1;
+    </style>
+  </head>
+  <body>
+    <header id="header">
+      <div id="header-title" class="space">
+        eex - collection of web eexperiments
+      </div>
+      <div id="header-meta" class="space">
+        Built by <a href="https://github.com/tofuness">Dennis Jin</a> /
+        <a href="https://dennisjin.com">dennisjin.com</a>.<span
+          class="mobile-newline"
+        ></span>
+        Open-sourced on <a href="https://github.com/tofuness/eex">Github</a>.
+      </div>
+    </header>
+    <div id="experiments">
+      <div class="experiment">
+        <a class="experiment-link libre" href="radial">
+          Radial Wave Engine <span class="experiment-link__latest">latest</span>
+        </a>
+      </div>
+      <div class="experiment">
+        <a class="experiment-link libre" href="lorenz">
+          Lorenz Visualizer
+        </a>
+      </div>
+      <div class="experiment">
+        <a class="experiment-link libre" href="life">
+          Canvas Life
+        </a>
+      </div>
+      <div class="experiment">
+        <a class="experiment-link libre" href="satoshi">
+          Satoshi Visualizer
+        </a>
+      </div>
+      <div class="experiment">
+        <a class="experiment-link libre" href="moire">
+          Moiré Pattern
+        </a>
+      </div>
+      <div class="experiment">
+        <a class="experiment-link libre" href="springy">
+          Springy Letters
+        </a>
+      </div>
+      <div class="experiment">
+        <a class="experiment-link libre" href="einstein">
+          Einstein Waves
+        </a>
+      </div>
+      <div class="experiment">
+        <a class="experiment-link libre" href="vectorfield">
+          Vector Field
+        </a>
+      </div>
+      <div class="experiment">
+        <a class="experiment-link libre" href="book">
+          Studies in a Dying Culture
+        </a>
+      </div>
+      <div class="experiment">
+        <a class="experiment-link libre" href="sine">
+          Sine Wave and Circles
+        </a>
+      </div>
+    </div>
+    <div id="background"></div>
+    <script type="text/javascript" src="fittext.js"></script>
+    <script type="text/javascript" src="perlin.js"></script>
+    <script type="text/javascript" src="pt.min.js"></script>
+    <script type="text/javascript">
+      window.onload = function() {
+        var space = new CanvasSpace('background').setup({
+          bgcolor: 'transparent',
+          resize: true
         });
-        element.addEventListener('mouseleave', function(e) {
-          handleMouseLeave(index);
-          hoverEasingTarget = 0;
-        });
-      });
+        var form = new Form(space);
+        var xbase = 0;
+        var xoff = 0;
+        var xTotalShift = 2.5;
+        var yoff = 30;
+        var yTotalShift = 2.5;
+        var yFocalPoint = space.center.y;
+        var zoff = 30;
 
-      space.add({
-        animate: function(time, fps, ctx) {
-          var delta = hoverEasingTarget - hoverEasing;
-          if (Math.abs(delta) > 0.05) {
-            hoverEasing += delta * 0.1;
-          }
-          ctx.clearRect(0, 0, space.size.x, space.size.y);
-          for (var i = 0; i < lineCount; i++) {
-            var points = [];
-            xoff = i * yTotalShift / lineCount + xbase;
-            for (var j = 0; j < pointCount + 1; j++) {
-              points.push(
-                new Vector({
-                  x: j * pointMargin.x,
-                  y: Math.round(i * lineMargin.y + lineMargin.y / 2)
-                  + Util.mapToRange(noise.perlin3(xoff, yoff, zoff), -1, 1, -200, 200)
-                })
-              )
-              xoff += xTotalShift / pointCount;
-            }
-            form.stroke(
-              fadeToColor('rgb(240,238,217)', 'rgb(255,95,60)', hoverEasing),
-              2
+        var lineCount = 8;
+        var lineMargin = space.size.$divide(lineCount);
+        var pointCount = 80;
+        var pointMargin = space.size.$divide(pointCount);
+
+        /* Hover action */
+        var hoverActive = false;
+
+        function calculateMargins() {
+          lineMargin = space.size.$divide(lineCount);
+          pointMargin = space.size.$divide(pointCount);
+        }
+        window.addEventListener('resize', function() {
+          calculateMargins();
+        });
+        function handleMouseOver(index) {
+          hoverActive = true;
+          calculateMargins();
+        }
+        function handleMouseLeave(index) {
+          hoverActive = false;
+          calculateMargins();
+        }
+
+        setTimeout(function() {
+          document.querySelector('#background').classList.add('visible');
+        }, 500);
+        setTimeout(function() {
+          Array.prototype.slice
+            .call(document.querySelectorAll('.experiment'))
+            .map(function(element, index) {
+              element.classList.add('visible');
+            });
+        }, 600);
+
+        var items = document.querySelectorAll('.experiment');
+        for (var i = 0; i < items.length; i++) {
+          window.fitText(items.item(i), 1.5, {
+            maxFontSize: 72,
+            minFontSize: 11
+          });
+        }
+
+        // target: [0, 1]
+        var hoverEasing = 0;
+        var hoverEasingTarget = 0;
+        function easeInOutCubic(t) {
+          return t < 0.5
+            ? 4 * t * t * t
+            : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+        }
+        function fadeToColor(rgbColor1, rgbColor2, ratio) {
+          var color1 = rgbColor1.substring(4, rgbColor1.length - 1).split(',');
+          var color2 = rgbColor2.substring(4, rgbColor2.length - 1).split(',');
+          var difference;
+          var newColor = [];
+          for (var i = 0; i < color1.length; i++) {
+            difference = color2[i] - color1[i];
+            newColor.push(
+              Math.floor(parseInt(color1[i], 10) + difference * ratio)
             );
-            form.curve(points);
           }
-          hoverActive ? xbase += 0.002 : xbase += 0.005;
-          hoverActive ? zoff += 0.001 : zoff += 0.005;
+          return 'rgb(' + newColor + ')';
         }
-      });
-      space.play();
-    }
-  </script>
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-72079615-3', 'auto');
-    ga('send', 'pageview');
-  </script>
-</body>
+        // Convert NodeList to array of elements
+        Array.prototype.slice
+          .call(document.querySelectorAll('.experiment-link'))
+          .map(function(element, index) {
+            element.addEventListener('mouseover', function(e) {
+              handleMouseOver(index);
+              hoverEasingTarget = 1;
+            });
+            element.addEventListener('mouseleave', function(e) {
+              handleMouseLeave(index);
+              hoverEasingTarget = 0;
+            });
+          });
+
+        space.add({
+          animate: function(time, fps, ctx) {
+            var delta = hoverEasingTarget - hoverEasing;
+            if (Math.abs(delta) > 0.05) {
+              hoverEasing += delta * 0.1;
+            }
+            ctx.clearRect(0, 0, space.size.x, space.size.y);
+            for (var i = 0; i < lineCount; i++) {
+              var points = [];
+              xoff = (i * yTotalShift) / lineCount + xbase;
+              for (var j = 0; j < pointCount + 1; j++) {
+                points.push(
+                  new Vector({
+                    x: j * pointMargin.x,
+                    y:
+                      Math.round(i * lineMargin.y + lineMargin.y / 2) +
+                      Util.mapToRange(
+                        noise.perlin3(xoff, yoff, zoff),
+                        -1,
+                        1,
+                        -200,
+                        200
+                      )
+                  })
+                );
+                xoff += xTotalShift / pointCount;
+              }
+              form.stroke(
+                fadeToColor('rgb(240,238,217)', 'rgb(255,95,60)', hoverEasing),
+                2
+              );
+              form.curve(points);
+            }
+            hoverActive ? (xbase += 0.002) : (xbase += 0.005);
+            hoverActive ? (zoff += 0.001) : (zoff += 0.005);
+          }
+        });
+        space.play();
+      };
+    </script>
+    <script>
+      (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        (i[r] =
+          i[r] ||
+          function() {
+            (i[r].q = i[r].q || []).push(arguments);
+          }),
+          (i[r].l = 1 * new Date());
+        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      })(
+        window,
+        document,
+        'script',
+        'https://www.google-analytics.com/analytics.js',
+        'ga'
+      );
+
+      ga('create', 'UA-72079615-3', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
 </html>
